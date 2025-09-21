@@ -1,4 +1,4 @@
-package com.nojodan.empresasdle.models;
+package com.nojodan.empresasdle.models.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;

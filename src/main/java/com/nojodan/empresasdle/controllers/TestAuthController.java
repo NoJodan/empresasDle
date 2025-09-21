@@ -1,7 +1,7 @@
 package com.nojodan.empresasdle.controllers;
 
 import com.nojodan.empresasdle.models.User;
-import com.nojodan.empresasdle.models.LoginRequest;
+import com.nojodan.empresasdle.models.dto.LoginRequest;
 import com.nojodan.empresasdle.models.ServiceResponse;
 import com.nojodan.empresasdle.services.AuthService;
 import lombok.RequiredArgsConstructor;
