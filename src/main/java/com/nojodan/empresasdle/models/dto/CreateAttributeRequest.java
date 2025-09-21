@@ -3,6 +3,7 @@ package com.nojodan.empresasdle.models.dto;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.Size;
 import lombok.Data;
 
 @Data
@@ -16,5 +17,6 @@ public class CreateAttributeRequest {
     private Long categoryId;
     
     @NotBlank(message = "El valor del atributo no puede estar vacío")
+    @Size(min = 2, max = 100, message = "El valor del atributo debe tener entre 2 y 100 caracteres")
     private String value;
 }

@@ -1,8 +1,6 @@
 package com.nojodan.empresasdle.models.game;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
 import lombok.*;
 
 @Entity
@@ -16,8 +14,6 @@ public class GuessAttribute {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank(message = "El valor del atributo no puede estar vacío")
-    @Size(min = 2, max = 100, message = "El valor del atributo debe tener entre 2 y 100 caracteres")
     @Column(nullable = false, length = 100)
     private String value;
 
