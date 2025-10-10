@@ -68,24 +68,30 @@ public class GameAdminService {
     }
 
     // Crear atributo
-    public ServiceResponse<GuessAttribute> createAttribute(Long itemId, Long categoryId, String value) {
-        Optional<GuessItem> item = guessItemRepository.findById(itemId);
-        if (item.isEmpty()) {
-            return new ServiceResponse<>(false, "Item no encontrado", null);
+    public ServiceResponse<GuessAttribute> createAttribute(Long themeId, Long categoryId, Long itemId, String value) {
+        Optional<Theme> theme = themeRepository.findById(themeId);
+        if (theme.isEmpty()) {
+            return new ServiceResponse<>(false, "Tema no encontrado", null);
         }
 
         Optional<Category> category = categoryRepository.findById(categoryId);
         if (category.isEmpty()) {
             return new ServiceResponse<>(false, "Categoría no encontrada", null);
         }
+        
+        Optional<GuessItem> item = guessItemRepository.findById(itemId);
+        if (item.isEmpty()) {
+            return new ServiceResponse<>(false, "Item no encontrado", null);
+        }
 
-        if (guessAttributeRepository.findByGuessItemIdAndCategoryId(itemId, categoryId).isPresent()) {
+        if (guessAttributeRepository.findByGuessItemIdAndCategoryIdAndThemeId(itemId, categoryId, themeId).isPresent()) {
             return new ServiceResponse<>(false, "El atributo ya existe para este item en esta categoría", null);
         }
 
         GuessAttribute attribute = GuessAttribute.builder()
                 .guessItem(item.get())
                 .category(category.get())
+                .theme(theme.get())
                 .value(value)
                 .build();
         GuessAttribute saved = guessAttributeRepository.save(attribute);
@@ -119,8 +125,8 @@ public class GameAdminService {
         return new ServiceResponse<>(true, "Items obtenidos", items);
     }
 
-    public ServiceResponse<List<GuessAttribute>> getAttributesByItem(Long itemId, Long categoryId) {
-        Optional<GuessAttribute> attributes = guessAttributeRepository.findByGuessItemIdAndCategoryId(itemId, categoryId);
+    public ServiceResponse<List<GuessAttribute>> getAttributesByItemAndThemeId(Long itemId, Long categoryId, Long themeId) {
+        Optional<GuessAttribute> attributes = guessAttributeRepository.findByGuessItemIdAndCategoryIdAndThemeId(itemId, categoryId, themeId);
 
         if(attributes.isEmpty()) return new ServiceResponse<>(true, "No hay atributos registrados", List.of());
 

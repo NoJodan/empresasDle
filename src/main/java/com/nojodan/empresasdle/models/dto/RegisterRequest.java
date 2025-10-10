@@ -11,14 +11,14 @@ public class RegisterRequest {
     @Size(min = 3, max = 20, message = "El nombre de usuario debe tener entre 3 y 20 caracteres")
     private String username;
 
-    @NotBlank(message = "La contraseña es obligatoria")
-    private String password;
-
     @NotBlank(message = "La contraseña no puede estar vacía")
     @Size(min = 8, max = 20, message = "La contraseña debe tener entre 8 y 20 caracteres")
     @Pattern(
         regexp = "^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d).+$",
         message = "La contraseña debe contener al menos una mayúscula, una minúscula y un número"
     )
+    private String password;
+
+    @NotBlank(message = "El email no puede estar vacío")
     private String email;
 }

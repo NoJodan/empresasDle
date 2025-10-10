@@ -41,6 +41,7 @@ public class GameAdminController {
         );
     }
 
+    // No cambiar a request body porque es un GET
     @GetMapping("/themes/{themeId}/categories")
     public ResponseEntity<?> getCategories(@PathVariable Long themeId) {
         return ResponseBuilder.buildResponse(
@@ -49,14 +50,15 @@ public class GameAdminController {
         );
     }
 
-    @PostMapping("/themes/{themeId}/items")
-    public ResponseEntity<?> createGuessItem(@PathVariable Long themeId, @Valid @RequestBody CreateGuessItemRequest request) {
+    @PostMapping("/themes/items")
+    public ResponseEntity<?> createGuessItem(@Valid @RequestBody CreateGuessItemRequest request) {
         return ResponseBuilder.buildCreatedResponse(
-                gameAdminService.createGuessItem(themeId, request.getName()),
+                gameAdminService.createGuessItem(request.getThemeId(), request.getName()),
                 "item"
         );
     }
-
+    
+    // No cambiar a request body porque es un GET
     @GetMapping("/themes/{themeId}/items")
     public ResponseEntity<?> getItems(@PathVariable Long themeId) {
         return ResponseBuilder.buildResponse(
@@ -65,18 +67,19 @@ public class GameAdminController {
         );
     }
 
-    @PostMapping("/items/{itemId}/categories/{categoryId}/attributes")
-    public ResponseEntity<?> createAttribute(@PathVariable Long itemId, @PathVariable Long categoryId, @Valid @RequestBody CreateAttributeRequest request) {
+    @PostMapping("/themes/categories/items/attributes")
+    public ResponseEntity<?> createAttribute(@Valid @RequestBody CreateAttributeRequest request) {
         return ResponseBuilder.buildCreatedResponse(
-                gameAdminService.createAttribute(itemId, categoryId, request.getValue()),
+                gameAdminService.createAttribute(request.getThemeId(), request.getCategoryId(), request.getItemId(), request.getValue()),
                 "attribute"
         );
     }
 
-    @GetMapping("/items/{itemId}/categories/{categoryId}/attributes")
-    public ResponseEntity<?> getAttributes(@PathVariable Long itemId, @PathVariable Long categoryId) {
+    // No cambiar a request body porque es un GET
+    @GetMapping("/themes/{themeId}/categories/{categoryId}/items/{itemId}/attributes")
+    public ResponseEntity<?> getAttributes(@PathVariable Long themeId, @PathVariable Long categoryId, @PathVariable Long itemId) {
         return ResponseBuilder.buildResponse(
-                gameAdminService.getAttributesByItem(itemId, categoryId),
+                gameAdminService.getAttributesByItemAndThemeId(itemId, categoryId, themeId),
                 "attributes"
         );
     }

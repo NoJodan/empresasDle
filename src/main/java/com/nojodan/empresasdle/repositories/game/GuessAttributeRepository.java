@@ -6,5 +6,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.Optional;
 
 public interface GuessAttributeRepository extends JpaRepository<GuessAttribute, Long> {
-    Optional<GuessAttribute> findByGuessItemIdAndCategoryId(Long itemId, Long categoryId);
+    Optional<GuessAttribute> findByGuessItemIdAndCategoryIdAndThemeId(Long itemId, Long categoryId, Long themeId);
 }

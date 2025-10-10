@@ -22,6 +22,7 @@ public class GuessItem {
     @JoinColumn(name = "theme_id", nullable = false)
     private Theme theme;
 
-    @OneToMany(mappedBy = "guessItem", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "guessItem", cascade = CascadeType.ALL)
+    @com.fasterxml.jackson.annotation.JsonIgnore
     private List<GuessAttribute> attributes;
 }

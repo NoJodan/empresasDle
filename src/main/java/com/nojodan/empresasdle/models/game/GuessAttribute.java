@@ -18,10 +18,15 @@ public class GuessAttribute {
     private String value;
 
     @ManyToOne(optional = false)
+    @JoinColumn(name = "theme_id", nullable = false)
+    private Theme theme;
+
+    @ManyToOne(optional = false)
     @JoinColumn(name = "category_id", nullable = false)
     private Category category;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "guess_item_id", nullable = false)
+    @com.fasterxml.jackson.annotation.JsonIgnore
     private GuessItem guessItem;
 }
