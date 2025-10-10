@@ -132,4 +132,88 @@ public class GameAdminService {
 
         return new ServiceResponse<>(true, "Atributos obtenidos", List.of(attributes.get()));
     }
+
+    // Modificar temática
+    public ServiceResponse<Theme> updateTheme(Long themeId, String name) {
+        Optional<Theme> themeOpt = themeRepository.findById(themeId);
+        if (themeOpt.isEmpty()) {
+            return new ServiceResponse<>(false, "Tema no encontrado", null);
+        }
+        Theme theme = themeOpt.get();
+        theme.setName(name);
+        Theme updated = themeRepository.save(theme);
+        return new ServiceResponse<>(true, "Temática modificada con éxito", updated);
+    }
+
+    // Eliminar temática
+    public ServiceResponse<Boolean> deleteTheme(Long themeId) {
+        if (!themeRepository.existsById(themeId)) {
+            return new ServiceResponse<>(false, "Tema no encontrado", false);
+        }
+        themeRepository.deleteById(themeId);
+        return new ServiceResponse<>(true, "Temática eliminada con éxito", true);
+    }
+
+    // Modificar categoría
+    public ServiceResponse<Category> updateCategory(Long categoryId, String name) {
+        Optional<Category> categoryOpt = categoryRepository.findById(categoryId);
+        if (categoryOpt.isEmpty()) {
+            return new ServiceResponse<>(false, "Categoría no encontrada", null);
+        }
+        Category category = categoryOpt.get();
+        category.setName(name);
+        Category updated = categoryRepository.save(category);
+        return new ServiceResponse<>(true, "Categoría modificada con éxito", updated);
+    }
+
+    // Eliminar categoría
+    public ServiceResponse<Boolean> deleteCategory(Long categoryId) {
+        if (!categoryRepository.existsById(categoryId)) {
+            return new ServiceResponse<>(false, "Categoría no encontrada", false);
+        }
+        categoryRepository.deleteById(categoryId);
+        return new ServiceResponse<>(true, "Categoría eliminada con éxito", true);
+    }
+
+    // Modificar item
+    public ServiceResponse<GuessItem> updateGuessItem(Long itemId, String name) {
+        Optional<GuessItem> itemOpt = guessItemRepository.findById(itemId);
+        if (itemOpt.isEmpty()) {
+            return new ServiceResponse<>(false, "Item no encontrado", null);
+        }
+        GuessItem item = itemOpt.get();
+        item.setName(name);
+        GuessItem updated = guessItemRepository.save(item);
+        return new ServiceResponse<>(true, "Item modificado con éxito", updated);
+    }
+
+    // Eliminar item
+    public ServiceResponse<Boolean> deleteGuessItem(Long itemId) {
+        if (!guessItemRepository.existsById(itemId)) {
+            return new ServiceResponse<>(false, "Item no encontrado", false);
+        }
+        guessItemRepository.deleteById(itemId);
+        return new ServiceResponse<>(true, "Item eliminado con éxito", true);
+    }
+
+    // Modificar atributo
+    public ServiceResponse<GuessAttribute> updateAttribute(Long attributeId, String value) {
+        Optional<GuessAttribute> attrOpt = guessAttributeRepository.findById(attributeId);
+        if (attrOpt.isEmpty()) {
+            return new ServiceResponse<>(false, "Atributo no encontrado", null);
+        }
+        GuessAttribute attribute = attrOpt.get();
+        attribute.setValue(value);
+        GuessAttribute updated = guessAttributeRepository.save(attribute);
+        return new ServiceResponse<>(true, "Atributo modificado con éxito", updated);
+    }
+
+    // Eliminar atributo
+    public ServiceResponse<Boolean> deleteAttribute(Long attributeId) {
+        if (!guessAttributeRepository.existsById(attributeId)) {
+            return new ServiceResponse<>(false, "Atributo no encontrado", false);
+        }
+        guessAttributeRepository.deleteById(attributeId);
+        return new ServiceResponse<>(true, "Atributo eliminado con éxito", true);
+    }
 }

@@ -33,6 +33,24 @@ public class GameAdminController {
         );
     }
 
+        // Modificar Theme
+        @PutMapping("/themes/{themeId}")
+        public ResponseEntity<?> updateTheme(@PathVariable Long themeId, @RequestBody CreateThemeRequest request) {
+            return ResponseBuilder.buildResponse(
+                    gameAdminService.updateTheme(themeId, request.getName()),
+                    "theme"
+            );
+        }
+
+        // Eliminar Theme
+        @DeleteMapping("/themes/{themeId}")
+        public ResponseEntity<?> deleteTheme(@PathVariable Long themeId) {
+            return ResponseBuilder.buildResponse(
+                    gameAdminService.deleteTheme(themeId),
+                    "theme"
+            );
+        }
+
     @PostMapping("/themes/categories")
     public ResponseEntity<?> createCategory(@Valid @RequestBody CreateCategoryRequest request) {
         return ResponseBuilder.buildCreatedResponse(
@@ -49,6 +67,24 @@ public class GameAdminController {
                 "categories"
         );
     }
+
+        // Modificar Category
+        @PutMapping("/categories/{categoryId}")
+        public ResponseEntity<?> updateCategory(@PathVariable Long categoryId, @RequestBody CreateCategoryRequest request) {
+            return ResponseBuilder.buildResponse(
+                    gameAdminService.updateCategory(categoryId, request.getName()),
+                    "category"
+            );
+        }
+
+        // Eliminar Category
+        @DeleteMapping("/categories/{categoryId}")
+        public ResponseEntity<?> deleteCategory(@PathVariable Long categoryId) {
+            return ResponseBuilder.buildResponse(
+                    gameAdminService.deleteCategory(categoryId),
+                    "category"
+            );
+        }
 
     @PostMapping("/themes/items")
     public ResponseEntity<?> createGuessItem(@Valid @RequestBody CreateGuessItemRequest request) {
@@ -67,6 +103,24 @@ public class GameAdminController {
         );
     }
 
+        // Modificar GuessItem
+        @PutMapping("/items/{itemId}")
+        public ResponseEntity<?> updateGuessItem(@PathVariable Long itemId, @RequestBody CreateGuessItemRequest request) {
+            return ResponseBuilder.buildResponse(
+                    gameAdminService.updateGuessItem(itemId, request.getName()),
+                    "item"
+            );
+        }
+
+        // Eliminar GuessItem
+        @DeleteMapping("/items/{itemId}")
+        public ResponseEntity<?> deleteGuessItem(@PathVariable Long itemId) {
+            return ResponseBuilder.buildResponse(
+                    gameAdminService.deleteGuessItem(itemId),
+                    "item"
+            );
+        }
+
     @PostMapping("/themes/categories/items/attributes")
     public ResponseEntity<?> createAttribute(@Valid @RequestBody CreateAttributeRequest request) {
         return ResponseBuilder.buildCreatedResponse(
@@ -83,5 +137,23 @@ public class GameAdminController {
                 "attributes"
         );
     }
+
+        // Modificar Attribute
+        @PutMapping("/attributes/{attributeId}")
+        public ResponseEntity<?> updateAttribute(@PathVariable Long attributeId, @RequestBody CreateAttributeRequest request) {
+            return ResponseBuilder.buildResponse(
+                    gameAdminService.updateAttribute(attributeId, request.getValue()),
+                    "attribute"
+            );
+        }
+
+        // Eliminar Attribute
+        @DeleteMapping("/attributes/{attributeId}")
+        public ResponseEntity<?> deleteAttribute(@PathVariable Long attributeId) {
+            return ResponseBuilder.buildResponse(
+                    gameAdminService.deleteAttribute(attributeId),
+                    "attribute"
+            );
+        }
     
 }

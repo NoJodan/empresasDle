@@ -20,4 +20,8 @@ public class Category {
     @ManyToOne(optional = false)
     @JoinColumn(name = "theme_id", nullable = false)
     private Theme theme;
+
+    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, orphanRemoval = true)
+    @com.fasterxml.jackson.annotation.JsonIgnore
+    private java.util.List<GuessAttribute> attributes;
 }
