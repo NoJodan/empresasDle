@@ -9,7 +9,6 @@ import lombok.Setter;
 @AllArgsConstructor
 public class AttributeComparison {
     private String attributeName;
-    private String userValue;
-    private String correctValue;
-    private String result;
+    private String value;
+    private String hint;
 }

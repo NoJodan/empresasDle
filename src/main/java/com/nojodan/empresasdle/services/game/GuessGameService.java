@@ -2,13 +2,14 @@ package com.nojodan.empresasdle.services.game;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 import com.nojodan.empresasdle.models.ServiceResponse;
 import com.nojodan.empresasdle.models.dto.AttributeComparison;
-import com.nojodan.empresasdle.models.dto.GuessResponse;
 import com.nojodan.empresasdle.models.game.DailyItem;
 import com.nojodan.empresasdle.models.game.GuessAttribute;
 import com.nojodan.empresasdle.models.game.GuessItem;
@@ -28,47 +29,62 @@ public class GuessGameService {
 
     public ServiceResponse<?> makeGuess(Long themeId, String itemName) {
         Optional<DailyItem> dailyItem = dailyItemRepository.findByThemeIdAndDate(themeId, LocalDate.now());
-        if(dailyItem.isEmpty()) return new ServiceResponse<>(false, "No hay un item configurado para esta tematica", null);
+        if (dailyItem.isEmpty())
+            return new ServiceResponse<>(false, "No hay un item configurado para esta tematica", null);
 
         GuessItem targetItem = dailyItem.get().getGuessItem();
 
         Optional<GuessItem> guessedItem = guessItemRepository.findByNameIgnoreCaseAndThemeId(itemName, themeId);
-        if(guessedItem.isEmpty()) return new ServiceResponse<>(false, "Item no encontrado", null);
+        if (guessedItem.isEmpty())
+            return new ServiceResponse<>(false, "Item no encontrado", null);
 
+        List<GuessAttribute> guessedAttributes = guessedItem.get().getAttributes();
+        List<GuessAttribute> correctAttributes = targetItem.getAttributes();
         List<AttributeComparison> comparisons = new ArrayList<>();
 
-        for (GuessAttribute guessedAttr : guessedItem.get().getAttributes()) {
-            GuessAttribute targetAttr = targetItem.getAttributes().stream()
-                    .filter(a -> a.getCategory().equals(guessedAttr.getCategory()))
+        for (GuessAttribute guessedAttr : guessedAttributes) {
+            String attributeName = guessedAttr.getCategory().getName();
+            String guessedValue = guessedAttr.getValue();
+
+            GuessAttribute correctAttr = correctAttributes.stream()
+                    .filter(a -> a.getCategory().getId().equals(guessedAttr.getCategory().getId()))
                     .findFirst()
                     .orElse(null);
 
-            if (targetAttr != null) {
-                String result = compareValues(guessedAttr.getValue(), targetAttr.getValue());
-                comparisons.add(new AttributeComparison(
-                        guessedAttr.getCategory().getName(),
-                        guessedAttr.getValue(),
-                        targetAttr.getValue(),
-                        result
-                ));
-            }
+            if (correctAttr == null)
+                continue;
+
+            String hint = generatrHint(guessedValue, correctAttr.getValue());
+
+            comparisons.add(new AttributeComparison(
+                    attributeName,
+                    guessedValue,
+                    hint));
         }
 
-        boolean correct = guessedItem.get().getId().equals(targetItem.getId());
-        GuessResponse data = new GuessResponse(correct, guessedItem.get().getName(), comparisons);
-        return new ServiceResponse<>(true, "Adivinanza procesada", data);
+        boolean isCompletelyCorrect = comparisons.stream()
+                .allMatch(attr -> attr.getHint().equals("Correcto"));
+        Map<String, Object> responseData = new HashMap<>();
+        responseData.put("correct", isCompletelyCorrect);
+        responseData.put("attributeHints", comparisons);
+        return new ServiceResponse<>(true, "Adivinanza procesada", responseData);
 
     }
 
-    private String compareValues(String userValue, String correctValue) {
-        if (userValue.equalsIgnoreCase(correctValue)) return "EQUAL";
-
+    private String generatrHint(String guessedValue, String correctValue) {
         try {
-            double userNum = Double.parseDouble(userValue);
-            double correctNum = Double.parseDouble(correctValue);
-            return (userNum > correctNum) ? "GREATER" : "LESS";
+            double guessedNumber = Double.parseDouble(guessedValue);
+            double correctNumber = Double.parseDouble(correctValue);
+
+            if (guessedNumber == correctNumber)
+                return "Correcto";
+            return guessedNumber > correctNumber ? "El valor debe ser menor" : "El valor debe ser mayor";
         } catch (NumberFormatException e) {
-            return "DIFFERENT";
+            if (guessedValue.equalsIgnoreCase(correctValue)) {
+                return "Correcto";
+            } else {
+                return "Incorrecto";
+            }
         }
     }
 
