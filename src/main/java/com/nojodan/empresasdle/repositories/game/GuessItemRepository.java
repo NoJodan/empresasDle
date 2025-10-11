@@ -8,4 +8,6 @@ import java.util.Optional;
 public interface GuessItemRepository extends JpaRepository<GuessItem, Long> {
     List<GuessItem> findByThemeId(Long themeId);
     Optional<GuessItem> findByThemeIdAndName(Long themeId, String name);
+    Optional<GuessItem> findFirstByThemeId(Long themeId);
+    Optional<GuessItem> findByNameIgnoreCaseAndThemeId(String name, Long themeId);
 }

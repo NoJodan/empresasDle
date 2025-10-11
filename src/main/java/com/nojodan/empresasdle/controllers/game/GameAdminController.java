@@ -1,6 +1,7 @@
 package com.nojodan.empresasdle.controllers.game;
 
 import com.nojodan.empresasdle.models.dto.*;
+import com.nojodan.empresasdle.services.game.DailyItemService;
 import com.nojodan.empresasdle.services.game.GameAdminService;
 import com.nojodan.empresasdle.utils.ResponseBuilder;
 
@@ -8,7 +9,6 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.bind.annotation.GetMapping;
 
 @RestController
 @RequestMapping("/api/admin/game")
@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class GameAdminController {
 
     private final GameAdminService gameAdminService;
+    private final DailyItemService dailyItemService;
 
     @PostMapping("/themes")
     public ResponseEntity<?> createTheme(@Valid @RequestBody CreateThemeRequest request) {
@@ -33,23 +34,23 @@ public class GameAdminController {
         );
     }
 
-        // Modificar Theme
-        @PutMapping("/themes/{themeId}")
-        public ResponseEntity<?> updateTheme(@PathVariable Long themeId, @RequestBody CreateThemeRequest request) {
-            return ResponseBuilder.buildResponse(
-                    gameAdminService.updateTheme(themeId, request.getName()),
-                    "theme"
-            );
-        }
-
-        // Eliminar Theme
-        @DeleteMapping("/themes/{themeId}")
-        public ResponseEntity<?> deleteTheme(@PathVariable Long themeId) {
-            return ResponseBuilder.buildResponse(
-                    gameAdminService.deleteTheme(themeId),
-                    "theme"
-            );
-        }
+    // Modificar Theme
+    @PutMapping("/themes/{themeId}")
+    public ResponseEntity<?> updateTheme(@PathVariable Long themeId, @RequestBody CreateThemeRequest request) {
+        return ResponseBuilder.buildResponse(
+                gameAdminService.updateTheme(themeId, request.getName()),
+                "theme"
+        );
+    }
+    
+    // Eliminar Theme
+    @DeleteMapping("/themes/{themeId}")
+    public ResponseEntity<?> deleteTheme(@PathVariable Long themeId) {
+        return ResponseBuilder.buildResponse(
+                gameAdminService.deleteTheme(themeId),
+                "theme"
+        );
+    }
 
     @PostMapping("/themes/categories")
     public ResponseEntity<?> createCategory(@Valid @RequestBody CreateCategoryRequest request) {
@@ -155,5 +156,29 @@ public class GameAdminController {
                     "attribute"
             );
         }
+    
+    @PostMapping("/daily/generate")
+    public ResponseEntity<?> generateDailyItems() {
+        return ResponseBuilder.buildResponse(
+                dailyItemService.generateDailyItems(),
+                "dailyItems"
+        );
+    }
+
+    @PostMapping("/{themeId}/daily/generate")
+    public ResponseEntity<?> generateDailyItemByTheme(@PathVariable Long themeId) {
+        return ResponseBuilder.buildResponse(
+            dailyItemService.generateDailyItemByTheme(themeId),
+            "dailyItem"
+        );
+    }
+
+    @GetMapping("/{themeId}/daily")
+    public ResponseEntity<?> getDailyItem(@PathVariable Long themeId) {
+        return ResponseBuilder.buildResponse(
+                dailyItemService.getDailyItem(themeId),
+                "dailyItem"
+        );
+    }
     
 }

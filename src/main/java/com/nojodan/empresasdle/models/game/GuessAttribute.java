@@ -26,7 +26,7 @@ public class GuessAttribute {
     private Category category;
 
     @ManyToOne(optional = false)
-    @JoinColumn(name = "guess_item_id", nullable = false)
+    @JoinColumn(name = "item_id", nullable = false)
     @com.fasterxml.jackson.annotation.JsonIgnore
     private GuessItem guessItem;
 }
