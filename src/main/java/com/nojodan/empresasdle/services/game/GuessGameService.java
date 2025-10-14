@@ -54,7 +54,7 @@ public class GuessGameService {
             if (correctAttr == null)
                 continue;
 
-            String hint = generatrHint(guessedValue, correctAttr.getValue());
+            String hint = generateHint(guessedValue, correctAttr.getValue());
 
             comparisons.add(new AttributeComparison(
                     attributeName,
@@ -71,7 +71,7 @@ public class GuessGameService {
 
     }
 
-    private String generatrHint(String guessedValue, String correctValue) {
+    private String generateHint(String guessedValue, String correctValue) {
         try {
             double guessedNumber = Double.parseDouble(guessedValue);
             double correctNumber = Double.parseDouble(correctValue);
