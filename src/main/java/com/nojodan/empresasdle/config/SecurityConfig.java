@@ -26,19 +26,21 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        return http
-                .csrf(csrf -> csrf.disable())
-                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/auth/**").permitAll()
-                        .requestMatchers("/test/public").permitAll()
-                        .requestMatchers("/api/admin/game/**").hasRole("ADMIN")
-                        .requestMatchers("/api/game/**").hasAnyRole("USER", "ADMIN")
-                        .anyRequest().authenticated()
-                )
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
-                .build();
+    return http
+        .csrf(csrf -> csrf.disable())
+        .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+        .authorizeHttpRequests(auth -> auth
+            .requestMatchers("/auth/**").permitAll()
+            .requestMatchers("/test/public").permitAll()
+            .requestMatchers("/api/admin/game/themes/{themeId}/items").hasAnyRole("USER", "ADMIN")
+            .requestMatchers("/api/admin/game/themes/{themeId}/categories").hasAnyRole("USER", "ADMIN")
+            .requestMatchers("/api/admin/game/**").hasRole("ADMIN")
+            .requestMatchers("/api/game/**").hasAnyRole("USER", "ADMIN")
+            .anyRequest().authenticated()
+        )
+        .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+        .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
+        .build();
     }
 
     @Bean

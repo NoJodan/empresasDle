@@ -28,11 +28,12 @@ public class AuthService {
             return new ServiceResponse<>(false, "El email ya está registrado", null);
         }
 
-        User user = new User();
-        user.setUsername(username);
-        user.setEmail(email);
-        user.setPassword(passwordEncoder.encode(password));
-        User savedUser = userRepository.save(user);
+    User user = new User();
+    user.setUsername(username);
+    user.setEmail(email);
+    user.setPassword(passwordEncoder.encode(password));
+    user.setRole("ROLE_USER");
+    User savedUser = userRepository.save(user);
 
         return new ServiceResponse<>(true, "Usuario registrado con éxito", savedUser.getUsername());
     }

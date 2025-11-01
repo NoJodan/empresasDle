@@ -23,7 +23,7 @@ public class User {
     private String password;
 
     @Column(name = "role", nullable = false)
-    private String role = "ROLE_USER";
+    private String role = "USER";
 
     @Column(name = "registerDate", nullable = false, updatable = false)
     private LocalDateTime registerDate = LocalDateTime.now();
